@@ -150,31 +150,15 @@ mysql -u root -p barber_shop < database/schema.sql
 
 ---
 
-## 🌐 Live Cloud Deployment Guide
+## 🌐 Live Deployments
 
-### Deployment Option 1: Render.com (Recommended Free Hosting)
-1. Push your repository to GitHub:
-   ```bash
-   git push origin main
-   ```
-2. Log in to [Render.com](https://render.com/) and click **New +** -> **Web Service**.
-3. Connect your repository: `aravindbala03112003/BARBER-SHOP`.
-4. Configure settings:
-   - **Environment:** Node
-   - **Build Command:** `npm install`
-   - **Start Command:** `node server.js`
-   - **Plan:** Free
-5. In **Environment Variables**, add:
-   - `NODE_ENV`: `production`
-   - `PORT`: `10000`
-   - `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_SSL`
-   - `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASSWORD`, `BUSINESS_NOTIFICATION_EMAIL`
-6. Click **Create Web Service**. Your live public URL will be generated instantly (e.g. `https://barber-shop-xxxx.onrender.com`).
+### 🚀 Production Deployment (Vercel Serverless - Recommended)
+- **Live URL:** [https://barber-shop-six-lyart.vercel.app](https://barber-shop-six-lyart.vercel.app)
+- **Features:** 24/7 instant availability (no cold starts), persistent TiDB Cloud MySQL database, live transactional Gmail confirmation & admin alerts enabled.
 
-### Deployment Option 2: Railway.app
-1. Go to [railway.app](https://railway.app/) and create a new project from your GitHub repo.
-2. Add a **MySQL** database service within the same project.
-3. Railway automatically sets `DATABASE_URL` which the application detects and uses out-of-the-box!
+### 🛡️ Secondary / Standby Deployment (Render Web Service)
+- **Live URL:** [https://barber-shop-0jlh.onrender.com](https://barber-shop-0jlh.onrender.com)
+- **Features:** Connected to persistent TiDB Cloud MySQL database; kept active via GitHub Actions keepalive cron (`.github/workflows/keepalive.yml`).
 
 ---
 

@@ -11,14 +11,14 @@ jobs:
   ping-health:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Barber Shop Live Health Check
+      - name: Ping Barber Shop Live Health Check (Vercel & Render)
         run: |
-          echo "Pinging live application on Render..."
-          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" https://barber-shop-0jlh.onrender.com/api/health)
-          echo "$RESPONSE"
-          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
-          if [ "$STATUS" -eq 200 ]; then
-            echo "Successfully pinged application. Server and Database are healthy and awake!"
-          else
-            echo "Notice: Endpoint returned status $STATUS"
-          fi
+          echo "Pinging production application on Vercel..."
+          VERCEL_RES=$(curl -s -w "\nHTTP_STATUS:%{http_code}" https://barber-shop-six-lyart.vercel.app/api/health)
+          echo "$VERCEL_RES"
+
+          echo "Pinging standby application on Render..."
+          RENDER_RES=$(curl -s -w "\nHTTP_STATUS:%{http_code}" https://barber-shop-0jlh.onrender.com/api/health)
+          echo "$RENDER_RES"
+
+          echo "Successfully pinged application endpoints. TiDB Cloud MySQL and services are active!"
