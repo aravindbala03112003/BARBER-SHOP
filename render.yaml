@@ -17,26 +17,22 @@ services:
       - key: DB_HOST
         sync: false
       - key: DB_PORT
-        value: 3306
+        value: "4000"
       - key: DB_USER
         sync: false
       - key: DB_PASSWORD
         sync: false
       - key: DB_NAME
-        sync: false
+        value: "barber_shop"
       - key: DB_SSL
         value: "true"
-      - key: EMAIL_HOST
-        sync: false
-      - key: EMAIL_PORT
-        value: 587
-      - key: EMAIL_SECURE
-        value: "false"
+      - key: EMAIL_SERVICE
+        value: "gmail"
       - key: EMAIL_USER
         sync: false
       - key: EMAIL_PASSWORD
         sync: false
       - key: EMAIL_FROM
-        value: '"Barber Hair Salon" <no-reply@barbershop.com>'
+        sync: false
       - key: BUSINESS_NOTIFICATION_EMAIL
         sync: false
