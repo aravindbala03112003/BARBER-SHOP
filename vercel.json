@@ -4,6 +4,14 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "assets/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "favicon.svg",
+      "use": "@vercel/static"
     }
   ],
   "routes": [

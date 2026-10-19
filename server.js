@@ -428,6 +428,7 @@ app.post('/api/newsletter/subscribe', newsletterLimiter, async (req, res, next) 
 // ==========================================
 // STATIC FRONTEND ASSETS & FALLBACK
 // ==========================================
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use(express.static(__dirname));
 
 app.get('*', (req, res, next) => {
