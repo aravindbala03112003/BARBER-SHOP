@@ -91,8 +91,23 @@ async function runTests() {
 
   const app = require('../server');
 
-  // Allow server initialization to complete
-  await new Promise((r) => setTimeout(r, 1200));
+  // Wait for server to be responsive
+  let serverReady = false;
+  for (let i = 0; i < 25; i++) {
+    try {
+      const res = await request('GET', '/api/health');
+      if (res.statusCode === 200) {
+        serverReady = true;
+        break;
+      }
+    } catch (e) {
+      // server still starting
+    }
+    await new Promise((r) => setTimeout(r, 300));
+  }
+  if (!serverReady) {
+    throw new Error('Test server failed to start within timeout');
+  }
 
   let passed = 0;
   let failed = 0;
@@ -216,7 +231,15 @@ async function runTests() {
 
   // --- SUCCESSFUL BOOKING TEST ---
   let bookedRef = null;
+  let slotToBook = '11:00 AM';
+
   await test('POST /api/appointments successfully creates appointment and returns 201', async () => {
+    // Check available slots dynamically so repeated runs always succeed
+    const availRes = await request('GET', `/api/appointments/availability?date=${validDate}`);
+    if (availRes.data && availRes.data.availableSlots && availRes.data.availableSlots.length > 0) {
+      slotToBook = availRes.data.availableSlots[0];
+    }
+
     const res = await request('POST', '/api/appointments', {
       name: 'Michael Barber',
       email: 'michael.barber.test@example.com',
@@ -224,7 +247,7 @@ async function runTests() {
       service: 'Hair Cutting Style',
       barber: 'Master Barber',
       date: validDate,
-      time: '11:00 AM',
+      time: slotToBook,
       notes: 'Test automated appointment'
     });
     if (res.statusCode !== 201) throw new Error(`Expected 201, got ${res.statusCode} (${JSON.stringify(res.data)})`);
@@ -243,7 +266,7 @@ async function runTests() {
       phone: '0987654321',
       service: 'Stylist Shaving & Facial',
       date: validDate,
-      time: '11:00 AM' // Exact same time slot!
+      time: slotToBook // Exact same time slot!
     });
     if (res.statusCode !== 409) throw new Error(`Expected 409 Conflict, got ${res.statusCode}`);
     if (res.data.conflict !== true) throw new Error('Expected conflict flag in response');
@@ -253,8 +276,18 @@ async function runTests() {
   await test('GET /api/appointments/availability excludes booked slot from available list', async () => {
     const res = await request('GET', `/api/appointments/availability?date=${validDate}`);
     if (res.statusCode !== 200) throw new Error(`Expected 200, got ${res.statusCode}`);
-    if (res.data.availableSlots.includes('11:00 AM')) {
-      throw new Error('Booked slot "11:00 AM" was still returned in availableSlots!');
+    if (res.data.availableSlots.includes(slotToBook)) {
+      throw new Error(`Booked slot "${slotToBook}" was still returned in availableSlots!`);
+    }
+
+    // Clean up test appointment record
+    if (bookedRef) {
+      const { query } = require('../database/db');
+      try {
+        await query('DELETE FROM appointments WHERE booking_reference = ?', [bookedRef]);
+      } catch (e) {
+        // ignore cleanup error
+      }
     }
   });
 

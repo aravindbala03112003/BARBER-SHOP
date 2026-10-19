@@ -83,9 +83,10 @@ async function initDatabase() {
     // Create tables if not exist
     const schemaSql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
     const statements = schemaSql
+      .replace(/--.*$/gm, '')
       .split(';')
       .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+      .filter(stmt => stmt.length > 0);
 
     for (const stmt of statements) {
       try {
