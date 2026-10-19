@@ -26,13 +26,19 @@ function getTransporter() {
   const transportConfig = service
     ? {
         service,
-        auth: { user, pass }
+        auth: { user, pass },
+        connectionTimeout: 5000,
+        greetingTimeout: 5000,
+        socketTimeout: 5000
       }
     : {
         host,
         port,
         secure,
         auth: { user, pass },
+        connectionTimeout: 5000,
+        greetingTimeout: 5000,
+        socketTimeout: 5000,
         tls: {
           rejectUnauthorized: process.env.EMAIL_REJECT_UNAUTHORIZED !== 'false'
         }
