@@ -144,6 +144,9 @@ function isValidDate(dateStr) {
  */
 app.get('/api/health', async (req, res) => {
   const emailHealth = await verifyEmailConfig();
+  if (!isDbConnected()) {
+    await initDatabase();
+  }
   let dbAlive = isDbConnected();
   if (dbAlive) {
     try {

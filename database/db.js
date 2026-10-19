@@ -80,23 +80,30 @@ async function initDatabase() {
     const connection = await pool.getConnection();
     console.log(`[DB] Successfully connected to MySQL at ${config.host}:${config.port}/${config.database}`);
 
-    // Create tables if not exist
-    const schemaSql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
-    const statements = schemaSql
-      .replace(/--.*$/gm, '')
-      .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0);
+    // Create tables if schema.sql exists in bundle
+    try {
+      const schemaPath = path.join(__dirname, 'schema.sql');
+      if (fs.existsSync(schemaPath)) {
+        const schemaSql = fs.readFileSync(schemaPath, 'utf8');
+        const statements = schemaSql
+          .replace(/--.*$/gm, '')
+          .split(';')
+          .map(stmt => stmt.trim())
+          .filter(stmt => stmt.length > 0);
 
-    for (const stmt of statements) {
-      try {
-        await connection.query(stmt);
-      } catch (err) {
-        // Ignore duplicate insertion or existing table notices
-        if (!err.message.includes('already exists') && !err.message.includes('Duplicate entry')) {
-          console.warn(`[DB] Schema setup notice: ${err.message}`);
+        for (const stmt of statements) {
+          try {
+            await connection.query(stmt);
+          } catch (err) {
+            // Ignore duplicate insertion or existing table notices
+            if (!err.message.includes('already exists') && !err.message.includes('Duplicate entry')) {
+              console.warn(`[DB] Schema setup notice: ${err.message}`);
+            }
+          }
         }
       }
+    } catch (schemaErr) {
+      console.warn(`[DB] Schema setup note: ${schemaErr.message}`);
     }
 
     connection.release();
@@ -111,7 +118,7 @@ async function initDatabase() {
 }
 
 async function getPool() {
-  if (!pool && !isConnected) {
+  if (!pool || !isConnected) {
     await initDatabase();
   }
   return pool;
@@ -119,6 +126,10 @@ async function getPool() {
 
 // Database query wrapper with error handling and fallback
 async function query(sql, params = []) {
+  if (!pool || !isConnected) {
+    await initDatabase();
+  }
+
   if (pool && isConnected) {
     try {
       const [rows, fields] = await pool.execute(sql, params);
