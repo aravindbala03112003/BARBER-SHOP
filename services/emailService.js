@@ -11,30 +11,34 @@ let transporter = null;
 function getTransporter() {
   if (transporter) return transporter;
 
+  const service = process.env.EMAIL_SERVICE;
   const host = process.env.EMAIL_HOST;
   const user = process.env.EMAIL_USER;
   const pass = process.env.EMAIL_PASSWORD;
   const port = process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT, 10) : 587;
   const secure = process.env.EMAIL_SECURE === 'true' || port === 465;
 
-  if (!host || !user || !pass) {
-    console.warn('[Email] SMTP credentials not fully configured. Email notifications will be simulated in development.');
+  if (!user || !pass || (!host && !service)) {
+    console.warn('[Email] SMTP credentials not fully configured. Email notifications are in simulation mode.');
     return null;
   }
 
-  transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: {
-      user,
-      pass
-    },
-    tls: {
-      rejectUnauthorized: process.env.EMAIL_REJECT_UNAUTHORIZED !== 'false'
-    }
-  });
+  const transportConfig = service
+    ? {
+        service,
+        auth: { user, pass }
+      }
+    : {
+        host,
+        port,
+        secure,
+        auth: { user, pass },
+        tls: {
+          rejectUnauthorized: process.env.EMAIL_REJECT_UNAUTHORIZED !== 'false'
+        }
+      };
 
+  transporter = nodemailer.createTransport(transportConfig);
   return transporter;
 }
 
@@ -330,18 +334,33 @@ We look forward to serving you!
  * High-level method to send both admin & customer notifications
  */
 async function dispatchAppointmentEmails(appointment) {
+  const mailer = getTransporter();
+  if (!mailer) {
+    console.log(`[Email Notice] SMTP not configured. Emails simulated for booking ${appointment.booking_reference}`);
+    return {
+      adminDelivered: false,
+      customerDelivered: false,
+      anyDelivered: false,
+      simulated: true,
+      message: 'SMTP credentials not configured on server'
+    };
+  }
+
   const [adminResult, customerResult] = await Promise.allSettled([
     sendAdminNotification(appointment),
     sendCustomerConfirmation(appointment)
   ]);
 
-  const adminSuccess = adminResult.status === 'fulfilled' && adminResult.value.success;
-  const customerSuccess = customerResult.status === 'fulfilled' && customerResult.value.success;
+  const adminSuccess = adminResult.status === 'fulfilled' && adminResult.value.success && !adminResult.value.simulated;
+  const customerSuccess = customerResult.status === 'fulfilled' && customerResult.value.success && !customerResult.value.simulated;
 
   return {
-    adminDelivered: adminSuccess,
-    customerDelivered: customerSuccess,
-    anyDelivered: adminSuccess || customerSuccess
+    adminDelivered: !!adminSuccess,
+    customerDelivered: !!customerSuccess,
+    anyDelivered: !!(adminSuccess || customerSuccess),
+    simulated: false,
+    adminError: adminResult.status === 'rejected' ? adminResult.reason.message : (adminResult.value && adminResult.value.error),
+    customerError: customerResult.status === 'rejected' ? customerResult.reason.message : (customerResult.value && customerResult.value.error)
   };
 }
 

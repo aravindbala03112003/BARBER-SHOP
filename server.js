@@ -344,28 +344,36 @@ app.post('/api/appointments', bookingLimiter, async (req, res, next) => {
       status: 'confirmed'
     };
 
-    // Dispatch background email notifications safely
-    dispatchAppointmentEmails(appointmentRecord)
-      .then(async (result) => {
-        if (result.anyDelivered) {
-          try {
-            await query(
-              'UPDATE appointments SET notification_sent = 1 WHERE booking_reference = ?',
-              [bookingReference]
-            );
-          } catch (e) {
-            console.warn('[DB] Failed to update notification_sent flag:', e.message);
-          }
+    // Dispatch email notifications
+    let emailStatus = { delivered: false, simulated: true, message: 'SMTP not configured' };
+    try {
+      const emailResult = await dispatchAppointmentEmails(appointmentRecord);
+      emailStatus = {
+        delivered: !!emailResult.customerDelivered,
+        adminDelivered: !!emailResult.adminDelivered,
+        simulated: !!emailResult.simulated,
+        error: emailResult.customerError || emailResult.adminError || null
+      };
+
+      if (emailResult.anyDelivered) {
+        try {
+          await query(
+            'UPDATE appointments SET notification_sent = 1 WHERE booking_reference = ?',
+            [bookingReference]
+          );
+        } catch (e) {
+          console.warn('[DB] Failed to update notification_sent flag:', e.message);
         }
-      })
-      .catch((err) => {
-        console.error('[Email Dispatch Warning]', err.message);
-      });
+      }
+    } catch (emailErr) {
+      console.error('[Email Dispatch Error]', emailErr.message);
+    }
 
     return res.status(201).json({
       success: true,
       message: 'Your appointment has been successfully booked!',
-      appointment: appointmentRecord
+      appointment: appointmentRecord,
+      emailStatus
     });
   } catch (err) {
     next(err);

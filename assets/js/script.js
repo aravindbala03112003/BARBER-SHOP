@@ -335,7 +335,16 @@ if (appointmentForm) {
 
       if (response.status === 201 && result.success) {
         const ref = result.appointment ? result.appointment.booking_reference : "";
-        const successMsg = `Success! Appointment booked for ${service} on ${date} at ${time}. Your booking reference is ${ref}. Confirmation email has been sent.`;
+        let emailMsg = "";
+        if (result.emailStatus && result.emailStatus.delivered) {
+          emailMsg = ` A confirmation email has been sent to ${email}.`;
+        } else if (result.emailStatus && result.emailStatus.simulated) {
+          emailMsg = ` (Note: SMTP email delivery credentials are not yet configured on the server).`;
+        } else if (result.emailStatus && result.emailStatus.error) {
+          emailMsg = ` (Note: Email delivery could not be completed at this time: ${result.emailStatus.error}).`;
+        }
+
+        const successMsg = `Success! Appointment booked for ${service} on ${date} at ${time}. Your booking reference is ${ref}.${emailMsg}`;
         
         showInlineFeedback(successMsg, "success");
         showToast("Booking Confirmed!", `Reference #${ref}. See you on ${date} at ${time}!`, "success", 7000);
