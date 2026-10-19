@@ -1,0 +1,24 @@
+name: Keep Application & Database Always Alive
+
+on:
+  schedule:
+    # Trigger every 14 minutes to prevent Render free tier from sleeping (spins down after 15m)
+    # and to keep TiDB Cloud MySQL database connection active
+    - cron: '*/14 * * * *'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
+
+jobs:
+  ping-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Barber Shop Live Health Check
+        run: |
+          echo "Pinging live application on Render..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" https://barber-shop-0jlh.onrender.com/api/health)
+          echo "$RESPONSE"
+          STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d':' -f2)
+          if [ "$STATUS" -eq 200 ]; then
+            echo "Successfully pinged application. Server and Database are healthy and awake!"
+          else
+            echo "Notice: Endpoint returned status $STATUS"
+          fi

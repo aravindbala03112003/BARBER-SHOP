@@ -144,13 +144,23 @@ function isValidDate(dateStr) {
  */
 app.get('/api/health', async (req, res) => {
   const emailHealth = await verifyEmailConfig();
+  let dbAlive = isDbConnected();
+  if (dbAlive) {
+    try {
+      await query('SELECT 1');
+    } catch (e) {
+      console.warn('[DB Ping Warning]', e.message);
+      dbAlive = false;
+    }
+  }
+
   res.status(200).json({
     status: 'ok',
     uptimeSeconds: Math.floor(process.uptime()),
     timestamp: new Date().toISOString(),
     database: {
-      connected: isDbConnected(),
-      mode: isDbConnected() ? 'mysql_persistent' : 'local_mock_persistence'
+      connected: dbAlive,
+      mode: dbAlive ? 'mysql_persistent' : 'local_mock_persistence'
     },
     emailService: {
       configured: emailHealth.ready,
