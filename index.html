@@ -111,7 +111,7 @@
     <div class="header-bottom" data-header>
       <div class="container">
 
-        <a href="#" class="logo">
+        <a href="#top" class="logo">
           Barber
           <span class="span">Hair Salon</span>
         </a>
@@ -140,7 +140,7 @@
             </li>
 
             <li class="navbar-item">
-              <a href="#" class="navbar-link" data-nav-link>Contact</a>
+              <a href="#contact" class="navbar-link" data-nav-link>Contact</a>
             </li>
 
           </ul>
@@ -150,7 +150,7 @@
           <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
         </button>
 
-        <a href="#" class="btn has-before">
+        <a href="#appointment" class="btn has-before">
           <span class="span">Appointment</span>
 
           <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -184,7 +184,7 @@
             ultrices gravida
           </p>
 
-          <a href="#" class="btn has-before">
+          <a href="#services" class="btn has-before">
             <span class="span">Explore Our Services</span>
 
             <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
@@ -220,14 +220,14 @@
                 </div>
 
                 <h3 class="h3">
-                  <a href="#" class="card-title">Hair Cutting Style</a>
+                  <a href="#appointment" class="card-title" data-service-select="Hair Cutting Style">Hair Cutting Style</a>
                 </h3>
 
                 <p class="card-text">
                   Sit amet consectetur adipisci elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
 
-                <a href="#" class="card-btn" aria-label="more">
+                <a href="#appointment" class="card-btn" aria-label="Book Hair Cutting Style" data-service-select="Hair Cutting Style">
                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                 </a>
 
@@ -242,14 +242,14 @@
                 </div>
 
                 <h3 class="h3">
-                  <a href="#" class="card-title">Hair Washing</a>
+                  <a href="#appointment" class="card-title" data-service-select="Hair Washing">Hair Washing</a>
                 </h3>
 
                 <p class="card-text">
                   Sit amet consectetur adipisci elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
 
-                <a href="#" class="card-btn" aria-label="more">
+                <a href="#appointment" class="card-btn" aria-label="Book Hair Washing" data-service-select="Hair Washing">
                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                 </a>
 
@@ -264,14 +264,14 @@
                 </div>
 
                 <h3 class="h3">
-                  <a href="#" class="card-title">Body Treatments</a>
+                  <a href="#appointment" class="card-title" data-service-select="Body Treatments">Body Treatments</a>
                 </h3>
 
                 <p class="card-text">
                   Sit amet consectetur adipisci elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
 
-                <a href="#" class="card-btn" aria-label="more">
+                <a href="#appointment" class="card-btn" aria-label="Book Body Treatments" data-service-select="Body Treatments">
                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                 </a>
 
@@ -286,14 +286,14 @@
                 </div>
 
                 <h3 class="h3">
-                  <a href="#" class="card-title">Beauty & Spa</a>
+                  <a href="#appointment" class="card-title" data-service-select="Beauty & Spa">Beauty & Spa</a>
                 </h3>
 
                 <p class="card-text">
                   Sit amet consectetur adipisci elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
 
-                <a href="#" class="card-btn" aria-label="more">
+                <a href="#appointment" class="card-btn" aria-label="Book Beauty & Spa" data-service-select="Beauty & Spa">
                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                 </a>
 
@@ -308,14 +308,14 @@
                 </div>
 
                 <h3 class="h3">
-                  <a href="#" class="card-title">Stylist Shaving</a>
+                  <a href="#appointment" class="card-title" data-service-select="Stylist Shaving & Facial">Stylist Shaving</a>
                 </h3>
 
                 <p class="card-text">
                   Sit amet consectetur adipisci elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
 
-                <a href="#" class="card-btn" aria-label="more">
+                <a href="#appointment" class="card-btn" aria-label="Book Stylist Shaving" data-service-select="Stylist Shaving & Facial">
                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                 </a>
 
@@ -330,14 +330,14 @@
                 </div>
 
                 <h3 class="h3">
-                  <a href="#" class="card-title">Multi Hair Colors</a>
+                  <a href="#appointment" class="card-title" data-service-select="Multi Hair Colors">Multi Hair Colors</a>
                 </h3>
 
                 <p class="card-text">
                   Sit amet consectetur adipisci elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                 </p>
 
-                <a href="#" class="card-btn" aria-label="more">
+                <a href="#appointment" class="card-btn" aria-label="Book Multi Hair Colors" data-service-select="Multi Hair Colors">
                   <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
                 </a>
 
@@ -616,8 +616,8 @@
               </p>
             </div>
 
-            <a href="#" class="btn has-before">
-              <span class="span">Explore More Gallery</span>
+            <a href="#appointment" class="btn has-before">
+              <span class="span">Book Appointment</span>
 
               <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
             </a>
@@ -750,36 +750,45 @@
                 suspendisse
               </p>
 
-              <form action="" class="appoin-form">
+              <div id="appoin-feedback" class="form-feedback" role="alert"></div>
+
+              <form class="appoin-form" id="appointment-form" novalidate>
 
                 <div class="input-wrapper">
-                  <input type="text" name="name" placeholder="Your Full Name" required class="input-field">
+                  <input type="text" name="name" id="appoin-name" placeholder="Your Full Name" required class="input-field" autocomplete="name">
 
-                  <input type="email" name="email_address" placeholder="Email Address" required class="input-field">
+                  <input type="email" name="email_address" id="appoin-email" placeholder="Email Address" required class="input-field" autocomplete="email">
                 </div>
 
                 <div class="input-wrapper">
-                  <input type="text" name="phone" placeholder="Phone Number" required class="input-field">
+                  <input type="tel" name="phone" id="appoin-phone" placeholder="Phone Number (e.g. 012 345 6789)" required class="input-field" autocomplete="tel">
 
-                  <select name="category" class="input-field">
-
-                    <option value="Select category">Select category</option>
-                    <option value="Beauty & spa">Beauty & spa</option>
-                    <option value="Body massage">Body massage</option>
-                    <option value="Shaving & Facial">Shaving & Facial</option>
-                    <option value="Hair Color">Hair Color</option>
-
+                  <select name="service" id="appoin-service" class="input-field" required>
+                    <option value="" disabled selected>Select Salon Service</option>
+                    <option value="Hair Cutting Style">Hair Cutting Style ($89)</option>
+                    <option value="Hair Washing">Hair Washing ($35)</option>
+                    <option value="Body Treatments">Body Treatments / Massage ($56)</option>
+                    <option value="Beauty & Spa">Beauty & Spa ($27)</option>
+                    <option value="Stylist Shaving & Facial">Stylist Shaving & Facial ($45)</option>
+                    <option value="Multi Hair Colors">Multi Hair Colors ($35)</option>
                   </select>
                 </div>
 
-                <input type="date" name="date" required class="input-field date">
+                <div class="input-wrapper">
+                  <input type="date" name="date" id="appoin-date" required class="input-field date" aria-label="Appointment Date">
 
-                <textarea name="message" placeholder="Write Message" required class="input-field"></textarea>
+                  <select name="time_slot" id="appoin-time" required class="input-field" aria-label="Appointment Time">
+                    <option value="" disabled selected>Select Date First</option>
+                  </select>
+                </div>
 
-                <button type="submit" class="form-btn">
-                  <span class="span">Appointment Now</span>
+                <textarea name="message" id="appoin-message" placeholder="Special requests or preferred barber (optional)" class="input-field"></textarea>
 
-                  <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+                <button type="submit" class="form-btn" id="appoin-submit-btn">
+                  <span class="span btn-text">Appointment Now</span>
+
+                  <ion-icon name="arrow-forward" aria-hidden="true" class="btn-icon"></ion-icon>
+                  <span class="spinner" style="display: none;" aria-hidden="true"></span>
                 </button>
 
               </form>
@@ -814,22 +823,24 @@
 
         <div class="footer-brand">
 
-          <a href="#" class="logo">
+          <a href="#top" class="logo">
             Barber
             <span class="span">Hair Salon</span>
           </a>
 
-          <form action="" class="input-wrapper">
+          <form class="input-wrapper" id="newsletter-form" novalidate>
 
-            <input type="email" name="email_address" placeholder="Enter Your Email" required class="email-field">
+            <input type="email" name="email_address" id="newsletter-email" placeholder="Enter Your Email" required class="email-field" autocomplete="email">
 
-            <button type="submit" class="btn has-before">
-              <span class="span">Subscribe Now</span>
+            <button type="submit" class="btn has-before" id="newsletter-submit-btn">
+              <span class="span btn-text">Subscribe Now</span>
 
-              <ion-icon name="arrow-forward" aria-hidden="true"></ion-icon>
+              <ion-icon name="arrow-forward" aria-hidden="true" class="btn-icon"></ion-icon>
+              <span class="spinner" style="display: none;" aria-hidden="true"></span>
             </button>
 
           </form>
+          <div id="newsletter-feedback" class="newsletter-feedback"></div>
 
         </div>
 
@@ -842,23 +853,23 @@
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Our Services</a>
+              <a href="#services" class="footer-link has-before">Our Services</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Meet Our Team</a>
+              <a href="#services" class="footer-link has-before">Meet Our Team</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Our Portfolio</a>
+              <a href="#gallery" class="footer-link has-before">Our Portfolio</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Need A Career?</a>
+              <a href="#contact" class="footer-link has-before">Need A Career?</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">News & Blog</a>
+              <a href="#services" class="footer-link has-before">News & Blog</a>
             </li>
 
           </ul>
@@ -870,23 +881,23 @@
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Hair Cutting</a>
+              <a href="#appointment" class="footer-link has-before" data-service-select="Hair Cutting Style">Hair Cutting</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Shaving & Design</a>
+              <a href="#appointment" class="footer-link has-before" data-service-select="Stylist Shaving & Facial">Shaving & Design</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Hair Colors</a>
+              <a href="#appointment" class="footer-link has-before" data-service-select="Multi Hair Colors">Hair Colors</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Beauty & Spa</a>
+              <a href="#appointment" class="footer-link has-before" data-service-select="Beauty & Spa">Beauty & Spa</a>
             </li>
 
             <li>
-              <a href="#" class="footer-link has-before">Body Massages</a>
+              <a href="#appointment" class="footer-link has-before" data-service-select="Body Treatments">Body Massages</a>
             </li>
 
           </ul>
@@ -945,7 +956,7 @@
 
           </ul>
 
-          <ul class="footer-list">
+          <ul class="footer-list" id="contact">
 
             <li>
               <p class="footer-list-title">Contact Us</p>
@@ -1018,6 +1029,11 @@
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- 
+    - Toast Notification Container
+  -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
 </body>
 

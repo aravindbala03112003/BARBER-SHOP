@@ -1,0 +1,32 @@
+{
+  "name": "barber-shop",
+  "version": "1.0.0",
+  "description": "Barber Shop Web Application with MySQL Database, Email Notifications, and Online Booking",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node tests/test.js"
+  },
+  "keywords": [
+    "barber",
+    "barbershop",
+    "salon",
+    "booking",
+    "appointment",
+    "mysql",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "mysql2": "^3.11.3",
+    "nodemailer": "^10.1.7"
+  }
+}
